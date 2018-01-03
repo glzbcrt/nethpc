@@ -1,4 +1,4 @@
-# netHPC &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/facebook/react/blob/master/LICENSE)
+# netHPC &middot; [![netHPC license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/glzbcrt/nethpc/blob/master/LICENSE)
 
 This repository contains the final project I developed to earn my bachelor degree. It is a system I created back in 2013 to distribute the computation of algorithms between several computers. It is a big compute platform.
 
