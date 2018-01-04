@@ -1,6 +1,6 @@
 # netHPC &middot; [![netHPC license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/glzbcrt/nethpc/blob/master/LICENSE)
 
-This repository contains the final project I developed to earn my bachelor degree. It is a system I created back in 2013 to distribute the computation of algorithms between several computers. It is a big compute platform.
+This repository contains the final project I developed to earn my bachelor degree. It is a system I created back in 2009 to distribute the computation of algorithms between several computers. It is a big compute platform.
 
 I developed it in C# using SQL Server as the data store and its management interface was created using Microsoft Management Console.
 
