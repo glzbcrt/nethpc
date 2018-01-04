@@ -1,0 +1,648 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="netHPCModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2006/04/edm/ssdl">
+        <EntityContainer Name="netHPCModelStoreContainer">
+          <EntitySet Name="Algorithm" EntityType="netHPCModel.Store.Algorithm" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Event" EntityType="netHPCModel.Store.Event" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Execution" EntityType="netHPCModel.Store.Execution" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ExecutionNode" EntityType="netHPCModel.Store.ExecutionNode" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Node" EntityType="netHPCModel.Store.Node" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="WorkItem" EntityType="netHPCModel.Store.WorkItem" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="Algorithm_FK01" Association="netHPCModel.Store.Algorithm_FK01">
+            <End Role="Algorithm" EntitySet="Algorithm" />
+            <End Role="Execution" EntitySet="Execution" />
+          </AssociationSet>
+          <AssociationSet Name="Execution_FK01" Association="netHPCModel.Store.Execution_FK01">
+            <End Role="Execution" EntitySet="Execution" />
+            <End Role="ExecutionNode" EntitySet="ExecutionNode" />
+          </AssociationSet>
+          <AssociationSet Name="Execution_FK02" Association="netHPCModel.Store.Execution_FK02">
+            <End Role="Execution" EntitySet="Execution" />
+            <End Role="WorkItem" EntitySet="WorkItem" />
+          </AssociationSet>
+          <AssociationSet Name="Execution_FK03" Association="netHPCModel.Store.Execution_FK03">
+            <End Role="Execution" EntitySet="Execution" />
+            <End Role="Event" EntitySet="Event" />
+          </AssociationSet>
+          <AssociationSet Name="Node_FK01" Association="netHPCModel.Store.Node_FK01">
+            <End Role="Node" EntitySet="Node" />
+            <End Role="ExecutionNode" EntitySet="ExecutionNode" />
+          </AssociationSet>
+          <AssociationSet Name="Node_FK02" Association="netHPCModel.Store.Node_FK02">
+            <End Role="Node" EntitySet="Node" />
+            <End Role="WorkItem" EntitySet="WorkItem" />
+          </AssociationSet>
+          <AssociationSet Name="Node_FK03" Association="netHPCModel.Store.Node_FK03">
+            <End Role="Node" EntitySet="Node" />
+            <End Role="Event" EntitySet="Event" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Algorithm">
+          <Key>
+            <PropertyRef Name="algorithmId" />
+          </Key>
+          <Property Name="algorithmId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="description" Type="nvarchar" MaxLength="150" />
+          <Property Name="dateCreated" Type="datetime" Nullable="false" />
+          <Property Name="dateModified" Type="datetime" Nullable="false" />
+          <Property Name="assembly" Type="varbinary(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="algorithmId" />
+            <PropertyRef Name="executionId" />
+            <PropertyRef Name="nodeId" />
+            <PropertyRef Name="execUnitId" />
+            <PropertyRef Name="eventId" />
+          </Key>
+          <Property Name="algorithmId" Type="int" Nullable="false" />
+          <Property Name="executionId" Type="int" Nullable="false" />
+          <Property Name="nodeId" Type="int" Nullable="false" />
+          <Property Name="execUnitId" Type="int" Nullable="false" />
+          <Property Name="eventId" Type="int" Nullable="false" />
+          <Property Name="eventName" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="dateCreated" Type="datetime" Nullable="false" />
+          <Property Name="timeElapsed" Type="bigint" Nullable="false" />
+          <Property Name="internal" Type="bit" Nullable="false" />
+          <Property Name="text" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="Execution">
+          <Key>
+            <PropertyRef Name="algorithmId" />
+            <PropertyRef Name="executionId" />
+          </Key>
+          <Property Name="algorithmId" Type="int" Nullable="false" />
+          <Property Name="executionId" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="description" Type="nvarchar" MaxLength="150" />
+          <Property Name="parameters" Type="nvarchar(max)" />
+          <Property Name="dateStart" Type="datetime" Nullable="false" />
+          <Property Name="dateFinish" Type="datetime" />
+          <Property Name="status" Type="tinyint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ExecutionNode">
+          <Key>
+            <PropertyRef Name="algorithmId" />
+            <PropertyRef Name="executionId" />
+            <PropertyRef Name="nodeId" />
+          </Key>
+          <Property Name="algorithmId" Type="int" Nullable="false" />
+          <Property Name="executionId" Type="int" Nullable="false" />
+          <Property Name="nodeId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Node">
+          <Key>
+            <PropertyRef Name="nodeId" />
+          </Key>
+          <Property Name="nodeId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="description" Type="nvarchar" MaxLength="150" />
+          <Property Name="dateCreated" Type="datetime" Nullable="false" />
+          <Property Name="lastReport" Type="datetime" Nullable="false" />
+          <Property Name="status" Type="tinyint" Nullable="false" />
+          <Property Name="numOfExecUnits" Type="int" Nullable="false" />
+          <Property Name="speedMHz" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WorkItem">
+          <Key>
+            <PropertyRef Name="algorithmId" />
+            <PropertyRef Name="executionId" />
+            <PropertyRef Name="nodeId" />
+            <PropertyRef Name="execUnitId" />
+            <PropertyRef Name="workItemId" />
+          </Key>
+          <Property Name="algorithmId" Type="int" Nullable="false" />
+          <Property Name="executionId" Type="int" Nullable="false" />
+          <Property Name="nodeId" Type="int" Nullable="false" />
+          <Property Name="execUnitId" Type="int" Nullable="false" />
+          <Property Name="workItemId" Type="int" Nullable="false" />
+          <Property Name="dateCreated" Type="datetime" Nullable="false" />
+          <Property Name="timeElapsed" Type="bigint" Nullable="false" />
+          <Property Name="text" Type="nvarchar(max)" />
+        </EntityType>
+        <Association Name="Algorithm_FK01">
+          <End Role="Algorithm" Type="netHPCModel.Store.Algorithm" Multiplicity="1" />
+          <End Role="Execution" Type="netHPCModel.Store.Execution" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Algorithm">
+              <PropertyRef Name="algorithmId" />
+            </Principal>
+            <Dependent Role="Execution">
+              <PropertyRef Name="algorithmId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Execution_FK01">
+          <End Role="Execution" Type="netHPCModel.Store.Execution" Multiplicity="1" />
+          <End Role="ExecutionNode" Type="netHPCModel.Store.ExecutionNode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Execution">
+              <PropertyRef Name="algorithmId" />
+              <PropertyRef Name="executionId" />
+            </Principal>
+            <Dependent Role="ExecutionNode">
+              <PropertyRef Name="algorithmId" />
+              <PropertyRef Name="executionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Execution_FK02">
+          <End Role="Execution" Type="netHPCModel.Store.Execution" Multiplicity="1" />
+          <End Role="WorkItem" Type="netHPCModel.Store.WorkItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Execution">
+              <PropertyRef Name="algorithmId" />
+              <PropertyRef Name="executionId" />
+            </Principal>
+            <Dependent Role="WorkItem">
+              <PropertyRef Name="algorithmId" />
+              <PropertyRef Name="executionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Execution_FK03">
+          <End Role="Execution" Type="netHPCModel.Store.Execution" Multiplicity="1" />
+          <End Role="Event" Type="netHPCModel.Store.Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Execution">
+              <PropertyRef Name="algorithmId" />
+              <PropertyRef Name="executionId" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="algorithmId" />
+              <PropertyRef Name="executionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Node_FK01">
+          <End Role="Node" Type="netHPCModel.Store.Node" Multiplicity="1" />
+          <End Role="ExecutionNode" Type="netHPCModel.Store.ExecutionNode" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Node">
+              <PropertyRef Name="nodeId" />
+            </Principal>
+            <Dependent Role="ExecutionNode">
+              <PropertyRef Name="nodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Node_FK02">
+          <End Role="Node" Type="netHPCModel.Store.Node" Multiplicity="1" />
+          <End Role="WorkItem" Type="netHPCModel.Store.WorkItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Node">
+              <PropertyRef Name="nodeId" />
+            </Principal>
+            <Dependent Role="WorkItem">
+              <PropertyRef Name="nodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Node_FK03">
+          <End Role="Node" Type="netHPCModel.Store.Node" Multiplicity="1" />
+          <End Role="Event" Type="netHPCModel.Store.Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Node">
+              <PropertyRef Name="nodeId" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="nodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="ExecutionDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="algorithmId" Type="int" Mode="In" />
+          <Parameter Name="executionId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ExecutionInsert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="algorithmId" Type="int" Mode="In" />
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+          <Parameter Name="description" Type="nvarchar" Mode="In" />
+          <Parameter Name="parameters" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="dateStart" Type="datetime" Mode="In" />
+          <Parameter Name="dateFinish" Type="datetime" Mode="In" />
+          <Parameter Name="status" Type="tinyint" Mode="In" />
+        </Function>
+        <Function Name="ExecutionUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="algorithmId" Type="int" Mode="In" />
+          <Parameter Name="executionId" Type="int" Mode="In" />
+          <Parameter Name="name" Type="nvarchar" Mode="In" />
+          <Parameter Name="description" Type="nvarchar" Mode="In" />
+          <Parameter Name="parameters" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="dateStart" Type="datetime" Mode="In" />
+          <Parameter Name="dateFinish" Type="datetime" Mode="In" />
+          <Parameter Name="status" Type="tinyint" Mode="In" />
+        </Function>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="netHPCModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2006/04/edm">
+        <EntityContainer Name="Entities">
+          <EntitySet Name="Algorithm" EntityType="netHPCModel.Algorithm" />
+          <EntitySet Name="Event" EntityType="netHPCModel.Event" />
+          <EntitySet Name="Execution" EntityType="netHPCModel.Execution" />
+          <EntitySet Name="Node" EntityType="netHPCModel.Node" />
+          <EntitySet Name="WorkItem" EntityType="netHPCModel.WorkItem" />
+          <AssociationSet Name="Algorithm_FK01" Association="netHPCModel.Algorithm_FK01">
+            <End Role="Algorithm" EntitySet="Algorithm" />
+            <End Role="Execution" EntitySet="Execution" />
+          </AssociationSet>
+          <AssociationSet Name="Execution_FK03" Association="netHPCModel.Execution_FK03">
+            <End Role="Execution" EntitySet="Execution" />
+            <End Role="Event" EntitySet="Event" />
+          </AssociationSet>
+          <AssociationSet Name="Node_FK03" Association="netHPCModel.Node_FK03">
+            <End Role="Node" EntitySet="Node" />
+            <End Role="Event" EntitySet="Event" />
+          </AssociationSet>
+          <AssociationSet Name="Execution_FK02" Association="netHPCModel.Execution_FK02">
+            <End Role="Execution" EntitySet="Execution" />
+            <End Role="WorkItem" EntitySet="WorkItem" />
+          </AssociationSet>
+          <AssociationSet Name="Node_FK02" Association="netHPCModel.Node_FK02">
+            <End Role="Node" EntitySet="Node" />
+            <End Role="WorkItem" EntitySet="WorkItem" />
+          </AssociationSet>
+          <AssociationSet Name="ExecutionNode" Association="netHPCModel.ExecutionNode">
+            <End Role="Execution" EntitySet="Execution" />
+            <End Role="Node" EntitySet="Node" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Algorithm">
+          <Key>
+            <PropertyRef Name="AlgorithmId" />
+          </Key>
+          <Property Name="AlgorithmId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="150" Unicode="true" FixedLength="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" />
+          <Property Name="DateModified" Type="DateTime" Nullable="false" />
+          <Property Name="Assembly" Type="Binary" Nullable="false" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Execution" Relationship="netHPCModel.Algorithm_FK01" FromRole="Algorithm" ToRole="Execution" />
+        </EntityType>
+        <EntityType Name="Event">
+          <Key>
+            <PropertyRef Name="AlgorithmId" />
+            <PropertyRef Name="ExecutionId" />
+            <PropertyRef Name="NodeId" />
+            <PropertyRef Name="ExecUnitId" />
+            <PropertyRef Name="EventId" />
+          </Key>
+          <Property Name="AlgorithmId" Type="Int32" Nullable="false" />
+          <Property Name="ExecutionId" Type="Int32" Nullable="false" />
+          <Property Name="NodeId" Type="Int32" Nullable="false" />
+          <Property Name="ExecUnitId" Type="Int32" Nullable="false" />
+          <Property Name="EventId" Type="Int32" Nullable="false" />
+          <Property Name="EventName" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" />
+          <Property Name="TimeElapsed" Type="Int64" Nullable="false" />
+          <Property Name="Internal" Type="Boolean" Nullable="false" />
+          <Property Name="Text" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Execution" Relationship="netHPCModel.Execution_FK03" FromRole="Event" ToRole="Execution" />
+          <NavigationProperty Name="Node" Relationship="netHPCModel.Node_FK03" FromRole="Event" ToRole="Node" />
+        </EntityType>
+        <EntityType Name="Execution">
+          <Key>
+            <PropertyRef Name="AlgorithmId" />
+            <PropertyRef Name="ExecutionId" />
+          </Key>
+          <Property Name="AlgorithmId" Type="Int32" Nullable="false" />
+          <Property Name="ExecutionId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="150" Unicode="true" FixedLength="false" />
+          <Property Name="Parameters" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="DateStart" Type="DateTime" Nullable="false" />
+          <Property Name="DateFinish" Type="DateTime" />
+          <Property Name="Status" Type="Byte" Nullable="false" />
+          <NavigationProperty Name="Algorithm" Relationship="netHPCModel.Algorithm_FK01" FromRole="Execution" ToRole="Algorithm" />
+          <NavigationProperty Name="Event" Relationship="netHPCModel.Execution_FK03" FromRole="Execution" ToRole="Event" />
+          <NavigationProperty Name="WorkItem" Relationship="netHPCModel.Execution_FK02" FromRole="Execution" ToRole="WorkItem" />
+          <NavigationProperty Name="Node" Relationship="netHPCModel.ExecutionNode" FromRole="Execution" ToRole="Node" />
+        </EntityType>
+        <EntityType Name="Node">
+          <Key>
+            <PropertyRef Name="NodeId" />
+          </Key>
+          <Property Name="NodeId" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Description" Type="String" MaxLength="150" Unicode="true" FixedLength="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" />
+          <Property Name="LastReport" Type="DateTime" Nullable="false" />
+          <Property Name="Status" Type="Byte" Nullable="false" />
+          <Property Name="NumOfExecUnits" Type="Int32" Nullable="false" />
+          <Property Name="SpeedMHz" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Event" Relationship="netHPCModel.Node_FK03" FromRole="Node" ToRole="Event" />
+          <NavigationProperty Name="WorkItem" Relationship="netHPCModel.Node_FK02" FromRole="Node" ToRole="WorkItem" />
+          <NavigationProperty Name="Execution" Relationship="netHPCModel.ExecutionNode" FromRole="Node" ToRole="Execution" />
+        </EntityType>
+        <EntityType Name="WorkItem">
+          <Key>
+            <PropertyRef Name="AlgorithmId" />
+            <PropertyRef Name="ExecutionId" />
+            <PropertyRef Name="NodeId" />
+            <PropertyRef Name="ExecUnitId" />
+            <PropertyRef Name="WorkItemId" />
+          </Key>
+          <Property Name="AlgorithmId" Type="Int32" Nullable="false" />
+          <Property Name="ExecutionId" Type="Int32" Nullable="false" />
+          <Property Name="NodeId" Type="Int32" Nullable="false" />
+          <Property Name="ExecUnitId" Type="Int32" Nullable="false" />
+          <Property Name="WorkItemId" Type="Int32" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" />
+          <Property Name="TimeElapsed" Type="Int64" Nullable="false" />
+          <Property Name="Text" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Execution" Relationship="netHPCModel.Execution_FK02" FromRole="WorkItem" ToRole="Execution" />
+          <NavigationProperty Name="Node" Relationship="netHPCModel.Node_FK02" FromRole="WorkItem" ToRole="Node" />
+        </EntityType>
+        <Association Name="Algorithm_FK01">
+          <End Role="Algorithm" Type="netHPCModel.Algorithm" Multiplicity="1" />
+          <End Role="Execution" Type="netHPCModel.Execution" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Algorithm">
+              <PropertyRef Name="AlgorithmId" />
+            </Principal>
+            <Dependent Role="Execution">
+              <PropertyRef Name="AlgorithmId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Execution_FK03">
+          <End Role="Execution" Type="netHPCModel.Execution" Multiplicity="1" />
+          <End Role="Event" Type="netHPCModel.Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Execution">
+              <PropertyRef Name="AlgorithmId" />
+              <PropertyRef Name="ExecutionId" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="AlgorithmId" />
+              <PropertyRef Name="ExecutionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Node_FK03">
+          <End Role="Node" Type="netHPCModel.Node" Multiplicity="1" />
+          <End Role="Event" Type="netHPCModel.Event" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Node">
+              <PropertyRef Name="NodeId" />
+            </Principal>
+            <Dependent Role="Event">
+              <PropertyRef Name="NodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Execution_FK02">
+          <End Role="Execution" Type="netHPCModel.Execution" Multiplicity="1" />
+          <End Role="WorkItem" Type="netHPCModel.WorkItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Execution">
+              <PropertyRef Name="AlgorithmId" />
+              <PropertyRef Name="ExecutionId" />
+            </Principal>
+            <Dependent Role="WorkItem">
+              <PropertyRef Name="AlgorithmId" />
+              <PropertyRef Name="ExecutionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Node_FK02">
+          <End Role="Node" Type="netHPCModel.Node" Multiplicity="1" />
+          <End Role="WorkItem" Type="netHPCModel.WorkItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Node">
+              <PropertyRef Name="NodeId" />
+            </Principal>
+            <Dependent Role="WorkItem">
+              <PropertyRef Name="NodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ExecutionNode">
+          <End Role="Execution" Type="netHPCModel.Execution" Multiplicity="*" />
+          <End Role="Node" Type="netHPCModel.Node" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="urn:schemas-microsoft-com:windows:storage:mapping:CS">
+        <EntityContainerMapping StorageEntityContainer="netHPCModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Algorithm">
+            <EntityTypeMapping TypeName="IsTypeOf(netHPCModel.Algorithm)">
+              <MappingFragment StoreEntitySet="Algorithm">
+                <ScalarProperty Name="AlgorithmId" ColumnName="algorithmId" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="DateCreated" ColumnName="dateCreated" />
+                <ScalarProperty Name="DateModified" ColumnName="dateModified" />
+                <ScalarProperty Name="Assembly" ColumnName="assembly" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Event">
+            <EntityTypeMapping TypeName="IsTypeOf(netHPCModel.Event)">
+              <MappingFragment StoreEntitySet="Event">
+                <ScalarProperty Name="AlgorithmId" ColumnName="algorithmId" />
+                <ScalarProperty Name="ExecutionId" ColumnName="executionId" />
+                <ScalarProperty Name="NodeId" ColumnName="nodeId" />
+                <ScalarProperty Name="ExecUnitId" ColumnName="execUnitId" />
+                <ScalarProperty Name="EventId" ColumnName="eventId" />
+                <ScalarProperty Name="EventName" ColumnName="eventName" />
+                <ScalarProperty Name="DateCreated" ColumnName="dateCreated" />
+                <ScalarProperty Name="TimeElapsed" ColumnName="timeElapsed" />
+                <ScalarProperty Name="Internal" ColumnName="internal" />
+                <ScalarProperty Name="Text" ColumnName="text" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Execution">
+            <EntityTypeMapping TypeName="IsTypeOf(netHPCModel.Execution)">
+              <MappingFragment StoreEntitySet="Execution">
+                <ScalarProperty Name="AlgorithmId" ColumnName="algorithmId" />
+                <ScalarProperty Name="ExecutionId" ColumnName="executionId" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="Parameters" ColumnName="parameters" />
+                <ScalarProperty Name="DateStart" ColumnName="dateStart" />
+                <ScalarProperty Name="DateFinish" ColumnName="dateFinish" />
+                <ScalarProperty Name="Status" ColumnName="status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="netHPCModel.Execution">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="netHPCModel.Store.ExecutionInsert">
+                  <ScalarProperty Name="Status" ParameterName="status" />
+                  <ScalarProperty Name="DateFinish" ParameterName="dateFinish" />
+                  <ScalarProperty Name="DateStart" ParameterName="dateStart" />
+                  <ScalarProperty Name="Parameters" ParameterName="parameters" />
+                  <ScalarProperty Name="Description" ParameterName="description" />
+                  <ScalarProperty Name="Name" ParameterName="name" />
+                  <ScalarProperty Name="AlgorithmId" ParameterName="algorithmId" />
+                  <ResultBinding Name="ExecutionId" ColumnName="executionId" /></InsertFunction>
+                <UpdateFunction FunctionName="netHPCModel.Store.ExecutionUpdate">
+                  <ScalarProperty Name="Status" ParameterName="status" Version="Current" />
+                  <ScalarProperty Name="DateFinish" ParameterName="dateFinish" Version="Current" />
+                  <ScalarProperty Name="DateStart" ParameterName="dateStart" Version="Current" />
+                  <ScalarProperty Name="Parameters" ParameterName="parameters" Version="Current" />
+                  <ScalarProperty Name="Description" ParameterName="description" Version="Current" />
+                  <ScalarProperty Name="Name" ParameterName="name" Version="Current" />
+                  <ScalarProperty Name="ExecutionId" ParameterName="executionId" Version="Current" />
+                  <ScalarProperty Name="AlgorithmId" ParameterName="algorithmId" Version="Current" /></UpdateFunction>
+                <DeleteFunction FunctionName="netHPCModel.Store.ExecutionDelete">
+                  <ScalarProperty Name="ExecutionId" ParameterName="executionId" />
+                  <ScalarProperty Name="AlgorithmId" ParameterName="algorithmId" /></DeleteFunction></ModificationFunctionMapping></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Node">
+            <EntityTypeMapping TypeName="IsTypeOf(netHPCModel.Node)">
+              <MappingFragment StoreEntitySet="Node">
+                <ScalarProperty Name="NodeId" ColumnName="nodeId" />
+                <ScalarProperty Name="Name" ColumnName="name" />
+                <ScalarProperty Name="Description" ColumnName="description" />
+                <ScalarProperty Name="DateCreated" ColumnName="dateCreated" />
+                <ScalarProperty Name="LastReport" ColumnName="lastReport" />
+                <ScalarProperty Name="Status" ColumnName="status" />
+                <ScalarProperty Name="NumOfExecUnits" ColumnName="numOfExecUnits" />
+                <ScalarProperty Name="SpeedMHz" ColumnName="speedMHz" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WorkItem">
+            <EntityTypeMapping TypeName="IsTypeOf(netHPCModel.WorkItem)">
+              <MappingFragment StoreEntitySet="WorkItem">
+                <ScalarProperty Name="AlgorithmId" ColumnName="algorithmId" />
+                <ScalarProperty Name="ExecutionId" ColumnName="executionId" />
+                <ScalarProperty Name="NodeId" ColumnName="nodeId" />
+                <ScalarProperty Name="ExecUnitId" ColumnName="execUnitId" />
+                <ScalarProperty Name="WorkItemId" ColumnName="workItemId" />
+                <ScalarProperty Name="DateCreated" ColumnName="dateCreated" />
+                <ScalarProperty Name="TimeElapsed" ColumnName="timeElapsed" />
+                <ScalarProperty Name="Text" ColumnName="text" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="Algorithm_FK01" TypeName="netHPCModel.Algorithm_FK01" StoreEntitySet="Execution">
+            <EndProperty Name="Algorithm">
+              <ScalarProperty Name="AlgorithmId" ColumnName="algorithmId" />
+            </EndProperty>
+            <EndProperty Name="Execution">
+              <ScalarProperty Name="AlgorithmId" ColumnName="algorithmId" />
+              <ScalarProperty Name="ExecutionId" ColumnName="executionId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Execution_FK03" TypeName="netHPCModel.Execution_FK03" StoreEntitySet="Event">
+            <EndProperty Name="Execution">
+              <ScalarProperty Name="AlgorithmId" ColumnName="algorithmId" />
+              <ScalarProperty Name="ExecutionId" ColumnName="executionId" />
+            </EndProperty>
+            <EndProperty Name="Event">
+              <ScalarProperty Name="AlgorithmId" ColumnName="algorithmId" />
+              <ScalarProperty Name="ExecutionId" ColumnName="executionId" />
+              <ScalarProperty Name="NodeId" ColumnName="nodeId" />
+              <ScalarProperty Name="ExecUnitId" ColumnName="execUnitId" />
+              <ScalarProperty Name="EventId" ColumnName="eventId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Node_FK03" TypeName="netHPCModel.Node_FK03" StoreEntitySet="Event">
+            <EndProperty Name="Node">
+              <ScalarProperty Name="NodeId" ColumnName="nodeId" />
+            </EndProperty>
+            <EndProperty Name="Event">
+              <ScalarProperty Name="AlgorithmId" ColumnName="algorithmId" />
+              <ScalarProperty Name="ExecutionId" ColumnName="executionId" />
+              <ScalarProperty Name="NodeId" ColumnName="nodeId" />
+              <ScalarProperty Name="ExecUnitId" ColumnName="execUnitId" />
+              <ScalarProperty Name="EventId" ColumnName="eventId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Execution_FK02" TypeName="netHPCModel.Execution_FK02" StoreEntitySet="WorkItem">
+            <EndProperty Name="Execution">
+              <ScalarProperty Name="AlgorithmId" ColumnName="algorithmId" />
+              <ScalarProperty Name="ExecutionId" ColumnName="executionId" />
+            </EndProperty>
+            <EndProperty Name="WorkItem">
+              <ScalarProperty Name="AlgorithmId" ColumnName="algorithmId" />
+              <ScalarProperty Name="ExecutionId" ColumnName="executionId" />
+              <ScalarProperty Name="NodeId" ColumnName="nodeId" />
+              <ScalarProperty Name="ExecUnitId" ColumnName="execUnitId" />
+              <ScalarProperty Name="WorkItemId" ColumnName="workItemId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Node_FK02" TypeName="netHPCModel.Node_FK02" StoreEntitySet="WorkItem">
+            <EndProperty Name="Node">
+              <ScalarProperty Name="NodeId" ColumnName="nodeId" />
+            </EndProperty>
+            <EndProperty Name="WorkItem">
+              <ScalarProperty Name="AlgorithmId" ColumnName="algorithmId" />
+              <ScalarProperty Name="ExecutionId" ColumnName="executionId" />
+              <ScalarProperty Name="NodeId" ColumnName="nodeId" />
+              <ScalarProperty Name="ExecUnitId" ColumnName="execUnitId" />
+              <ScalarProperty Name="WorkItemId" ColumnName="workItemId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="ExecutionNode" TypeName="netHPCModel.ExecutionNode" StoreEntitySet="ExecutionNode">
+            <EndProperty Name="Execution">
+              <ScalarProperty Name="AlgorithmId" ColumnName="algorithmId" />
+              <ScalarProperty Name="ExecutionId" ColumnName="executionId" />
+            </EndProperty>
+            <EndProperty Name="Node">
+              <ScalarProperty Name="NodeId" ColumnName="nodeId" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2007/06/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram Name="netHPCEntities">
+        <EntityTypeShape EntityType="netHPCModel.Algorithm" Width="1.5" PointX="1.25" PointY="5.625" Height="2.3648893229166665" IsExpanded="true" />
+        <EntityTypeShape EntityType="netHPCModel.Event" Width="1.5" PointX="5.375" PointY="7.75" Height="3.3263964843749996" IsExpanded="true" />
+        <EntityTypeShape EntityType="netHPCModel.Execution" Width="1.5" PointX="3.375" PointY="5.125" Height="3.3263964843749996" IsExpanded="true" />
+        <EntityTypeShape EntityType="netHPCModel.Node" Width="1.5" PointX="6.375" PointY="3.875" Height="3.1340950520833317" IsExpanded="true" />
+        <EntityTypeShape EntityType="netHPCModel.WorkItem" Width="1.5" PointX="7.75" PointY="7.75" Height="2.9417936197916665" IsExpanded="true" />
+        <AssociationConnector Association="netHPCModel.Algorithm_FK01" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.75" PointY="6.8074446614583337" />
+          <ConnectorPoint PointX="3.375" PointY="6.8074446614583337" /></AssociationConnector>
+        <AssociationConnector Association="netHPCModel.Execution_FK03" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.875" PointY="8.1006982421875" />
+          <ConnectorPoint PointX="5.375" PointY="8.1006982421875" />
+          </AssociationConnector>
+        <AssociationConnector Association="netHPCModel.Node_FK03" ManuallyRouted="false">
+          <ConnectorPoint PointX="6.625" PointY="7.0090950520833317" />
+          <ConnectorPoint PointX="6.625" PointY="7.75" />
+          </AssociationConnector>
+        <AssociationConnector Association="netHPCModel.Execution_FK02" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.875" PointY="7.379545026041666" />
+          <ConnectorPoint PointX="6.541666666666667" PointY="7.3795450260416651" />
+          <ConnectorPoint PointX="6.708333333333333" PointY="7.379545026041666" />
+          <ConnectorPoint PointX="8.1197896666666658" PointY="7.3795450260416651" />
+          <ConnectorPoint PointX="8.2864563333333336" PointY="7.379545026041666" />
+          <ConnectorPoint PointX="8.757814" PointY="7.379545026041666" />
+          <ConnectorPoint PointX="8.757814" PointY="7.75" /></AssociationConnector>
+        <AssociationConnector Association="netHPCModel.Node_FK02" ManuallyRouted="false">
+          <ConnectorPoint PointX="7.875" PointY="5.4420475260416659" />
+          <ConnectorPoint PointX="8.203123" PointY="5.4420475260416659" />
+          <ConnectorPoint PointX="8.203123" PointY="7.75" /></AssociationConnector>
+        <AssociationConnector Association="netHPCModel.ExecutionNode" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.875" PointY="6.0670475260416659" />
+          <ConnectorPoint PointX="6.375" PointY="6.0670475260416659" />
+          </AssociationConnector></Diagram></edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
